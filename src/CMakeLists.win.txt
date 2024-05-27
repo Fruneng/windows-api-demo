@@ -1,0 +1,48 @@
+add_definitions(/std:c++20)
+add_compile_definitions(_WIN32_WINNT=0x0A00)
+add_compile_definitions(NTDDI_VERSION=0x0A000000)
+add_compile_definitions(_SILENCE_CXX20_IS_POD_DEPRECATION_WARNING)
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+add_compile_definitions(WEBRTC_WIN)
+add_compile_definitions(NOMINMAX)
+add_compile_definitions(UNICODE)
+add_compile_definitions(_UNICODE)
+target_compile_options(demo PRIVATE /bigobj)
+
+message("Win32 lib options")
+target_compile_options(demo PRIVATE
+    $<$<CONFIG:Release>:/MD>
+)
+target_compile_options(demo PRIVATE
+    $<$<CONFIG:Debug>:/MDd>
+)
+
+if (PDB_DISABLED)
+    message("Release without pdb")
+else()
+    message("Release with pdb")    
+    target_compile_options(demo PRIVATE /Zi)
+    target_link_options(demo PRIVATE /Debug)
+endif()
+
+target_link_libraries(demo winmm)
+target_link_libraries(demo d3d11)
+target_link_libraries(demo d3dcompiler)
+target_link_libraries(demo dxgi)
+target_link_libraries(demo dxguid)
+target_link_libraries(demo shcore)
+target_link_libraries(demo dwmapi)
+target_link_libraries(demo Iphlpapi)
+target_link_libraries(demo wmcodecdspuuid)
+target_link_libraries(demo dmoguids)
+target_link_libraries(demo msdmo)
+target_link_libraries(demo secur32)
+target_link_libraries(demo user32)
+target_link_libraries(demo wtsapi32)
+target_link_libraries(demo userenv)
+#target_link_libraries(demo swdevice)
+
+# set debug output path
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}/bin/Debug)
+# set release output path
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin/Release)
